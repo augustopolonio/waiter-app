@@ -15,3 +15,26 @@ export const CloseButton = styled.TouchableOpacity`
   justify-content: center;
   margin: 24px;
 `;
+
+export const ModalBody = styled.View`
+  background-color: #fafafa;
+  flex: 1;
+  padding: 32px 24px 0;
+`;
+
+export const Header = styled.View`
+
+`;
+
+export const IngredientsContainer = styled.View`
+  margin-top: 23px;
+`;
+
+export const Ingredient = styled.View`
+  border: 1px solid rgba(204, 204, 204, 0.3);
+  border-radius: 8px;
+  align-items: center;
+  flex-direction: row;
+  padding: 16px;
+  margin-bottom: 4px;
+`;
