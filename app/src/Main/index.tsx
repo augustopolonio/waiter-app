@@ -23,6 +23,7 @@ export function Main() {
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]); //mockProducts
   const [categories, setCategories] = useState<Category[]>([]); //mockCategories
+  const [isLoadingProducts, setIsLoadingProducts] = useState(false);
 
   useEffect(() => {
 
@@ -45,6 +46,20 @@ export function Main() {
     // });
 
   }, []);
+
+  async function handleSelectCategory(categoryId: string) {
+    const route = categoryId
+      ? `/categories/${categoryId}/products`
+      : '/products';
+
+    setIsLoadingProducts(true);
+
+    // await new Promise(resolve => setTimeout(resolve, 1000));
+    const { data } = await api.get(route);
+    setProducts(data);
+
+    setIsLoadingProducts(false);
+  }
 
   function handleSaveTable(table: string) {
     setSelectedTable(table);
@@ -125,21 +140,30 @@ export function Main() {
             <CategoriesContainer>
               <Categories
                 categories={categories}
+                onSelectCategory={handleSelectCategory}
               />
             </CategoriesContainer>
 
-            {products.length > 0 ? (
-              <MenuContainer>
-                <Menu
-                  onAddToCart={handleAddToCart}
-                  products={products}
-                />
-              </MenuContainer>
-            ): (
+            {isLoadingProducts ? (
               <CenteredContainer>
-                <Empty></Empty>
-                <Text color="#666" style={{ marginTop: 24 }}>Nenhum produto foi encontrado!</Text>
+                <ActivityIndicator color="#D73035" size="large"/>
               </CenteredContainer>
+            ) : (
+              <>
+                {products.length > 0 ? (
+                  <MenuContainer>
+                    <Menu
+                      onAddToCart={handleAddToCart}
+                      products={products}
+                    />
+                  </MenuContainer>
+                ): (
+                  <CenteredContainer>
+                    <Empty></Empty>
+                    <Text color="#666" style={{ marginTop: 24 }}>Nenhum produto foi encontrado!</Text>
+                  </CenteredContainer>
+                )}
+              </>
             )}
           </>
         )}
