@@ -13,10 +13,10 @@ import { Actions, Image, Item, ProductContainer, ProductDetails, QuantityContain
 interface CartProps {
   cartItems: CartItem[];
   onAdd(product: Product): void;
-  onRemove(product: Product): void;
+  onDecrement(product: Product): void;
 }
 
-export function Cart({ cartItems, onAdd, onRemove }: CartProps) {
+export function Cart({ cartItems, onAdd, onDecrement }: CartProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const total = cartItems.reduce((acc, cartItem) => {
@@ -73,7 +73,7 @@ export function Cart({ cartItems, onAdd, onRemove }: CartProps) {
                   <PlusCircle />
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => onRemove(cartItem.product)}>
+                <TouchableOpacity onPress={() => onDecrement(cartItem.product)}>
                   <MinusCircle />
                 </TouchableOpacity>
               </Actions>

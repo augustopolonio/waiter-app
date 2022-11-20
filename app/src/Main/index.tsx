@@ -133,7 +133,7 @@ export function Main() {
             <Cart
               cartItems={cartItems}
               onAdd={handleAddToCart}
-              onRemove={handleDecrementItems}
+              onDecrement={handleDecrementItems}
             />
           )}
         </FooterContainer>
