@@ -7,6 +7,7 @@ import { Menu } from "../components/Menu";
 import { TableModal } from "../components/TableModal";
 import { products } from "../mocks/products";
 import { CartItem } from "../types/CartItem";
+import { Product } from "../types/Product";
 import { CategoriesContainer, Container, Footer, FooterContainer, MenuContainer } from "./styles";
 
 export function Main() {
@@ -46,6 +47,60 @@ export function Main() {
 
   function handleCancelOrder() {
     setSelectedTable('');
+    setCartItems([]);
+  }
+
+  function handleAddToCart(product: Product) {
+    if (!selectedTable){
+      setIsTableModalVisible(true);
+    }
+
+    setCartItems((prevState) => {
+      const itemIndex = prevState.findIndex(
+        cartItem => cartItem.product._id === product._id
+      );
+
+      if (itemIndex < 0) {
+        return prevState.concat({
+          quantity: 1,
+          product
+        });
+      }
+
+      const newCartItems = [...prevState];
+      const item = newCartItems[itemIndex];
+      newCartItems[itemIndex] = {
+        ...item,
+        quantity: item.quantity + 1
+      };
+
+      return newCartItems;
+
+    });
+  }
+
+  function handleDecrementItems(product: Product) {
+    setCartItems((prevState) => {
+      const itemIndex = prevState.findIndex(
+        cartItem => cartItem.product._id === product._id
+      );
+
+      const item = prevState[itemIndex];
+      const newCartItems = [...prevState];
+
+      if (item.quantity === 1) {
+        newCartItems.splice(itemIndex, 1);
+        return newCartItems;
+      }
+
+      newCartItems[itemIndex] = {
+        ...item,
+        quantity: item.quantity - 1
+      };
+
+      return newCartItems;
+
+    });
   }
 
   return (
@@ -61,7 +116,7 @@ export function Main() {
         </CategoriesContainer>
 
         <MenuContainer>
-          <Menu></Menu>
+          <Menu onAddToCart={handleAddToCart}></Menu>
         </MenuContainer>
 
       </Container>
@@ -75,7 +130,11 @@ export function Main() {
           )}
 
           {selectedTable && (
-            <Cart cartItems={cartItems} />
+            <Cart
+              cartItems={cartItems}
+              onAdd={handleAddToCart}
+              onRemove={handleDecrementItems}
+            />
           )}
         </FooterContainer>
       </Footer>
