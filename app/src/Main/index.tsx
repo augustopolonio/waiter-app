@@ -1,5 +1,5 @@
 import { ActivityIndicator } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../components/Button";
 import { Cart } from "../components/Cart";
 import { Categories } from "../components/Categories";
@@ -9,19 +9,44 @@ import { TableModal } from "../components/TableModal";
 import { CartItem } from "../types/CartItem";
 import { Product } from "../types/Product";
 import { CategoriesContainer, CenteredContainer, Container, Footer, FooterContainer, MenuContainer } from "./styles";
-import { products as mockProducts } from "../mocks/products";
+// import { products as mockProducts } from "../mocks/products";
+// import { categories as mockCategories } from "../mocks/categories";
 import { Empty } from "../components/Icons/Empty";
 import { Text } from "../components/Text";
+import { Category } from "../types/Category";
+import axios from "axios";
 
 export function Main() {
   const [isTableModalVisible, setIsTableModalVisible] = useState(false);
   const [selectedTable, setSelectedTable] = useState('');
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [products] = useState<Product[]>(mockProducts); //mockProducts
+  const [isLoading, setIsLoading] = useState(true);
+  const [products, setProducts] = useState<Product[]>([]); //mockProducts
+  const [categories, setCategories] = useState<Category[]>([]); //mockCategories
+
+  useEffect(() => {
+
+    Promise.all([
+      axios.get('http://192.168.2.103:3001/categories'),
+      axios.get('http://192.168.2.103:3001/products'),
+    ]).then(([categoriesResponse, productsResponse]) => {
+      setCategories(categoriesResponse.data);
+      setProducts(productsResponse.data);
+      setIsLoading(false);
+    });
+
+    // axios.get('http://192.168.2.103:3001/categories').then((response) => {
+    //   setCategories(response.data);
+    //   setIsLoading(false);
+    // });
+
+    // axios.get('http://192.168.2.103:3001/products').then((response) => {
+    //   setProducts(response.data);
+    // });
+
+  }, []);
 
   function handleSaveTable(table: string) {
-    // alert(`Main: ${table}`);
     setSelectedTable(table);
   }
 
@@ -98,7 +123,9 @@ export function Main() {
         ) : (
           <>
             <CategoriesContainer>
-              <Categories />
+              <Categories
+                categories={categories}
+              />
             </CategoriesContainer>
 
             {products.length > 0 ? (
