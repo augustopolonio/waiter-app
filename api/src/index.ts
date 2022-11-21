@@ -10,6 +10,13 @@ mongose.connect('mongodb://127.0.0.1:27017')
     const app = express();
     const port = 3001;
 
+    app.use((req, res, next) => {
+      res.setHeader('Access-Control-Allow-Origin', '*'); //http://192.168.2.103:3001
+      res.setHeader('Access-Control-Allow-Methods', '*');
+      res.setHeader('Access-Control-Allow-Headers', '*');
+
+      next();
+    });
     app.use('/uploads', express.static(path.resolve(__dirname, '..', 'uploads')));
     app.use(express.json());
     app.use(router);
