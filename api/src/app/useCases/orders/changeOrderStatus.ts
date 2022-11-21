@@ -19,6 +19,6 @@ export async function changeOrderStatus(req: Request, res: Response) {
 
   } catch (error) {
     console.log(error);
-    res.status(500);
+    res.sendStatus(500);
   }
 }

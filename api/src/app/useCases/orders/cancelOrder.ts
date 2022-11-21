@@ -8,9 +8,9 @@ export async function cancelOrder(req: Request, res: Response) {
 
     await Order.findByIdAndDelete(orderId);
 
-    res.status(204);
+    res.sendStatus(204);
   } catch (error) {
     console.log(error);
-    res.status(500);
+    res.sendStatus(500);
   }
 }
