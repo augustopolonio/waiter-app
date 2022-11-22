@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { OrderModal } from "../../OrderModal";
+import { OrderModal } from "../OrderModal";
 import { Order } from "../../types/Order";
 import { api } from "../../utils/api";
 import { Board, OrderContainer } from "./styles";
