@@ -5,15 +5,15 @@ import mongose from 'mongoose';
 import { router } from './router';
 import { Server } from 'socket.io';
 
-
+const app = express();
+const server = http.createServer(app);
+export const io = new Server(server);
 
 mongose.connect('mongodb://127.0.0.1:27017')
   .then(() => {
     const port = 3001;
 
-    const app = express();
-    const server = http.createServer(app);
-    const io = new Server(server);
+
 
     io.on('connect', () => {
       console.log('Conectou!');
